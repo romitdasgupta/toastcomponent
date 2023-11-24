@@ -18,11 +18,11 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({content="16 photos have been uploaded", variant="notice", toggleToast}) {
+function Toast({variant="notice", closeAction, keyid, children}) {
   const toastStyle = `${styles.toast} ${styles[variant]}`;
   const IconStyle = ICONS_BY_VARIANT[variant];
   function handleToggle() {
-    toggleToast(false);
+    closeAction(keyid);
   }
   return (
     <div className={toastStyle}>
@@ -30,7 +30,7 @@ function Toast({content="16 photos have been uploaded", variant="notice", toggle
         <IconStyle size={24} />
       </div>
       <p className={styles.content}>
-        {content}
+        {children}
       </p>
       <button className={styles.closeButton} onClick={handleToggle}>
         <X size={24} />

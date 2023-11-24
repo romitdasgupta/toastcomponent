@@ -4,6 +4,8 @@ import Button from '../Button';
 
 import Toast from '../Toast/Toast';
 
+import ToastShelf from '../ToastShelf/ToastShelf';
+
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
@@ -11,11 +13,26 @@ const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [radioVariant, setRadioVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [toast, toggleToast] = React.useState(false);
+  const [toasts, setToasts] = React.useState([]);
+  const latestToasts = React.useRef(toasts);
+
+  React.useEffect(() => {
+    latestToasts.current = toasts;
+  }, [toasts]);
+
+  const deleteToast  = (key) => {
+    const remainingToasts = latestToasts.current.filter((toast) => toast.key != key);
+    setToasts((toasts) => remainingToasts);
+  };
 
   function submitToast(e) {
     e.preventDefault();
-    toggleToast(true);
+    if (!message) return;
+    const key = crypto.randomUUID();
+    setToasts([...toasts, {jsx: <Toast variant={radioVariant}
+    closeAction={deleteToast}  keyid={key}>{message}</Toast>, key: key}]);
+    setMessage('');
+    setRadioVariant(VARIANT_OPTIONS[0]);
   }
 
   return (
@@ -25,8 +42,10 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {toast &&
-      <Toast  content={message} variant={radioVariant} toggleToast={toggleToast}/>}
+        <ToastShelf>
+          {toasts}
+        </ToastShelf>
+      <form onSubmit={submitToast}>
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
           <label
@@ -49,17 +68,17 @@ function ToastPlayground() {
             <div
               className={`${styles.inputWrapper} ${styles.radioWrapper}`}
             >
-              {VARIANT_OPTIONS.map((variant) => (
+              {VARIANT_OPTIONS.map((variant, index) => (
                 <label htmlFor={`variant-${variant}`} key={variant}>
+                  {variant}
                   <input
-                    id={`variant-${variant}`}
                     type="radio"
+                    id={`variant-${variant}`}
                     name="variant"
                     value={variant}
-                    onChange={(e) => setRadioVariant(e.target.value)}
-                    {...(variant === radioVariant ? { defaultChecked: true } : {})}
-                  />
-                  {variant}
+                    checked={radioVariant === variant}
+                    onChange={(e) => setRadioVariant(variant)}
+                />
                 </label>
               ))}
             </div>
@@ -69,10 +88,11 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button onClick={submitToast}>Pop Toast!</Button>
+            <Button type="submit">Pop Toast!</Button>
           </div>
         </div>
       </div>
+      </form>
     </div>
   );
 }
