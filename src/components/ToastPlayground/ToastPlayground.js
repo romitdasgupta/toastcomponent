@@ -23,7 +23,7 @@ function ToastPlayground() {
     const key = crypto.randomUUID();
     addToast(
       <Toast variant={radioVariant}
-             keyid={key} key={key}>
+             key_id={key} key={key}>
         {message}
       </Toast>);
     setMessage('');

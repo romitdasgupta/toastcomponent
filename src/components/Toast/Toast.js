@@ -19,13 +19,13 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({variant, keyid, children}) {
+function Toast({variant, key_id, children}) {
   const toastStyle = `${styles.toast} ${styles[variant]}`;
   const IconStyle = ICONS_BY_VARIANT[variant];
   const {removeToast} = React.useContext(ToastProviderContext);
 
   function handleClose() {
-    removeToast(keyid);
+    removeToast(key_id);
   }
 
   return (

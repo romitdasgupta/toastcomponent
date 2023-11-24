@@ -12,5 +12,5 @@ export default function useEscapeKey(handleEscape, deps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleEscape,...deps]);
+  }, [handleEscape, deps]);
 }

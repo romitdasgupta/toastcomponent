@@ -9,7 +9,7 @@ function ToastShelf({children}) {
         aria-live="polite"
         aria-label="Notification">
     {children.map((child) => (
-      <li className={styles.toastWrapper} key={child.props.keyid}>
+      <li className={styles.toastWrapper} key={child.props.key_id}>
         {child}
       </li>
     ))}

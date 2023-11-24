@@ -1,6 +1,6 @@
 import React from 'react';
 
-import  useEscapeKey from '../../hooks/escapehook';
+import useEscapeKey from '../../hooks/EscapeHook';
 
 export const ToastProviderContext = React.createContext();
 
@@ -17,7 +17,7 @@ function ToastProvider({children}) {
 
   function removeToast(key) {
     setToasts((currentToasts) => {
-      const filteredToasts = currentToasts.filter((toast) => toast.props.keyid !== key);
+      const filteredToasts = currentToasts.filter((toast) => toast.props.key_id !== key);
       return filteredToasts;
     });
   }
