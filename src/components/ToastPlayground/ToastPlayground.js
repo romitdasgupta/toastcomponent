@@ -6,6 +6,8 @@ import Toast from '../Toast/Toast';
 
 import ToastShelf from '../ToastShelf/ToastShelf';
 
+import { ToastProviderContext } from '../ToastProvider';
+
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
@@ -13,24 +15,17 @@ const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [radioVariant, setRadioVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [toasts, setToasts] = React.useState([]);
-  const latestToasts = React.useRef(toasts);
-
-  React.useEffect(() => {
-    latestToasts.current = toasts;
-  }, [toasts]);
-
-  const deleteToast  = (key) => {
-    const remainingToasts = latestToasts.current.filter((toast) => toast.key != key);
-    setToasts((toasts) => remainingToasts);
-  };
+  const {toasts, addToast} = React.useContext(ToastProviderContext);
 
   function submitToast(e) {
     e.preventDefault();
     if (!message) return;
     const key = crypto.randomUUID();
-    setToasts([...toasts, {jsx: <Toast variant={radioVariant}
-    closeAction={deleteToast}  keyid={key}>{message}</Toast>, key: key}]);
+    addToast(
+      <Toast variant={radioVariant}
+             keyid={key} key={key}>
+        {message}
+      </Toast>);
     setMessage('');
     setRadioVariant(VARIANT_OPTIONS[0]);
   }
