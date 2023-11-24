@@ -7,9 +7,11 @@ export const ToastProviderContext = React.createContext();
 function ToastProvider({children}) {
   const [toasts, setToasts] = React.useState([]);
 
-  useEscapeKey(() => {
+  const handleEscape = React.useCallback(() => {
     setToasts([]);
-  }, [toasts]);
+  }, []);
+
+  useEscapeKey(handleEscape);
 
   function addToast(toast) {
     setToasts((currentToasts) => [...currentToasts, toast]);
